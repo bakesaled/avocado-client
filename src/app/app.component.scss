@@ -1,0 +1,19 @@
+avocado-app, md-sidenav-container {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.avocado-main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.avocado-sidenav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 240px;
+}
