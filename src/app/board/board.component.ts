@@ -14,8 +14,11 @@ export class BoardComponent implements OnInit {
   private tiles: Array<Tile>;
   private allImagesLoaded: boolean;
   private imageLoadCount: number = 0;
+
+  private lightsContext: CanvasRenderingContext2D;
   
   @ViewChild('board') canvasRef: ElementRef;
+  @ViewChild('lights') lightsCanvasRef: ElementRef;
 
   constructor() {
     const clover = {
@@ -46,12 +49,20 @@ export class BoardComponent implements OnInit {
       width: 256,
       height: 256
     };
+    const trafficLight = {
+      id: 0,
+      x: 1,
+      y: 113,
+      width: 414,
+      height: 414
+    };
 
     this.tiles = [
       clover,
       this.eastWestRoadSegment,
       this.northSouthRoadSegment,
-      this.intersectionRoadSegment
+      this.intersectionRoadSegment,
+      trafficLight
     ];
   }
 
@@ -83,11 +94,16 @@ export class BoardComponent implements OnInit {
     roadNEWS.src = basePath + 'roads/roadNEWS.png';
     roadNEWS.onload = () => this.drawBoard();
 
+    const trafficLight = new Image();
+    trafficLight.src = basePath + 'traffic-light.png';
+    trafficLight.onload = () => this.drawBoard();
+
     this.tileSetImages = [
       clover,
       roadEW,
       roadNS,
-      roadNEWS
+      roadNEWS,
+      trafficLight
     ];
 
     // this.tileSetImage = new Image();
@@ -97,7 +113,7 @@ export class BoardComponent implements OnInit {
 
   drawBoard() {
     this.imageLoadCount++;
-    this.allImagesLoaded = this.imageLoadCount === 3;
+    this.allImagesLoaded = this.imageLoadCount === this.tileSetImages.length;
 
     if (!this.allImagesLoaded) {
       return;
@@ -122,11 +138,18 @@ export class BoardComponent implements OnInit {
       for (let c = 0; c < colTileCount; c++) {
         const tile = map[r][c];
 
-          const tileSetCell = this.tiles[tile]
+          let tileSetCell = this.tiles[tile]
           this.context.drawImage(this.tileSetImages[tile], tileSetCell.x, tileSetCell.y, tileSetCell.width, tileSetCell.height, (c * tileSize), (r * tileSize), tileSize, tileSize);
 
+          // draw light
+          if (tile === 3) {
+            tileSetCell = this.tiles[4]
+            this.context.drawImage(this.tileSetImages[4], tileSetCell.x, tileSetCell.y, tileSetCell.width, tileSetCell.height, ((c * tileSize) + 0), ((r * tileSize) + 32), 16, 16);
+          }
       }
     }
+
+
   }
 }
 
