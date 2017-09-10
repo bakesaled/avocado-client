@@ -6,42 +6,49 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  private tileSetImage: HTMLImageElement;
-  private roadTileSetImages: Array<HTMLImageElement>;
+  private tileSetImages: Array<HTMLImageElement>;
   private context: CanvasRenderingContext2D;
-  private eastWestRoadSegment: RoadSegment;
-  private northSouthRoadSegment: RoadSegment;
-  private intersectionRoadSegment: RoadSegment;
-  private roadSegs: Array<RoadSegment>;
+  private eastWestRoadSegment: Tile;
+  private northSouthRoadSegment: Tile;
+  private intersectionRoadSegment: Tile;
+  private tiles: Array<Tile>;
   private allImagesLoaded: boolean;
   private imageLoadCount: number = 0;
   
   @ViewChild('board') canvasRef: ElementRef;
 
   constructor() {
+    const clover = {
+      id: 0,
+      x: 0,
+      y: 0,
+      width: 1024,
+      height: 1024
+    };
     this.eastWestRoadSegment = {
       id: 1,
       x: 0,
       y: 0,
       width: 256,
       height: 256
-    }
+    };
     this.northSouthRoadSegment = {
       id: 2,
       x: 0,
       y: 0,
       width: 256,
       height: 256
-    }
+    };
     this.intersectionRoadSegment = {
       id: 3,
       x: 0,
       y: 0,
       width: 256,
       height: 256
-    }
+    };
 
-    this.roadSegs = [
+    this.tiles = [
+      clover,
       this.eastWestRoadSegment,
       this.northSouthRoadSegment,
       this.intersectionRoadSegment
@@ -58,21 +65,26 @@ export class BoardComponent implements OnInit {
   }
 
   loadTileSetImage() {
-    const basePath = '../../assets/roads/';
+    const basePath = '../../assets/';
+
+    const clover = new Image();
+    clover.src = basePath + 'textures/clover.jpg';
+    clover.onload = () => this.drawBoard();
 
     const roadEW = new Image();
-    roadEW.src = basePath + 'roadEW.png';
+    roadEW.src = basePath + 'roads/roadEW.png';
     roadEW.onload = () => this.drawBoard();
 
     const roadNS = new Image();
-    roadNS.src = basePath + 'roadNS.png';
+    roadNS.src = basePath + 'roads/roadNS.png';
     roadNS.onload = () => this.drawBoard();
 
     const roadNEWS = new Image();
-    roadNEWS.src = basePath + 'roadNEWS.png';
+    roadNEWS.src = basePath + 'roads/roadNEWS.png';
     roadNEWS.onload = () => this.drawBoard();
 
-    this.roadTileSetImages = [
+    this.tileSetImages = [
+      clover,
       roadEW,
       roadNS,
       roadNEWS
@@ -109,16 +121,16 @@ export class BoardComponent implements OnInit {
     for (let r = 0; r < rowTileCount; r++) {
       for (let c = 0; c < colTileCount; c++) {
         const tile = map[r][c];
-        if (tile > 0) {
-          const tileSetCell = this.roadSegs[tile - 1]
-          this.context.drawImage(this.roadTileSetImages[tile - 1], tileSetCell.x, tileSetCell.y, tileSetCell.width, tileSetCell.height, (c * tileSize), (r * tileSize), tileSize, tileSize);
-        }
+
+          const tileSetCell = this.tiles[tile]
+          this.context.drawImage(this.tileSetImages[tile], tileSetCell.x, tileSetCell.y, tileSetCell.width, tileSetCell.height, (c * tileSize), (r * tileSize), tileSize, tileSize);
+
       }
     }
   }
 }
 
-interface RoadSegment {
+interface Tile {
   id: number;
   x: number;
   y: number;
