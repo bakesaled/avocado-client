@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatService } from './chat.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { ImageService } from './image.service';
+import { GameService } from './game.service';
 
 @NgModule({
   imports: [
@@ -10,7 +11,8 @@ import { ImageService } from './image.service';
   ],
   providers: [
     ChatService,
-    ImageService
+    ImageService,
+    GameService
   ]
 })
 export class CoreModule {
