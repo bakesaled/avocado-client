@@ -9,8 +9,14 @@ import * as io from 'socket.io-client';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  public playerName: string;
+
   constructor(public auth: AuthService, private gameService: GameService) {
     auth.handleAuthentication();
     gameService.connect(io);
+    gameService.getPlayerInfo().subscribe((name: string) => {
+      console.log('player name', name);
+      this.playerName = name;
+    })
   }
 }
