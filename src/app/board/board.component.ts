@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ImageService } from '../core/image.service';
 import { Img } from '../core/classes/img';
 import { Subscription } from 'rxjs/Subscription';
-import { BoardService } from '../core/board.service';
+import { ApiService } from '../core/api.service';
 
 @Component({
   selector: 'avocado-board',
@@ -18,7 +18,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   @ViewChild('board') canvasRef: ElementRef;
   @ViewChild('lights') lightsCanvasRef: ElementRef;
 
-  constructor(private imageService: ImageService, private boardService: BoardService) {
+  constructor(private imageService: ImageService, private apiService: ApiService) {
     this.imagesSubscription = this.imageService.htmlImagesObs.subscribe((images) => this.drawBoard(images));
   }
 
@@ -26,8 +26,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.context = this.canvasRef.nativeElement.getContext('2d');
     this.lightsContext = this.lightsCanvasRef.nativeElement.getContext('2d');
 
-    this.boardSubscription = this.boardService.getBoardInfo().subscribe(boards => {
-      console.log('got boards', boards);
+    this.boardSubscription = this.apiService.getBoardInfo().subscribe(board => {
+      console.log('got boards', board);
       this.imageService.load();
     });
   }

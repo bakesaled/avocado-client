@@ -1,29 +1,35 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Board } from './classes/board';
 
-@Injectable()
-export class GameService {
+export class ApiService {
   private url = 'http://localhost:3000';
   public socket: SocketIOClient.Socket;
 
-  constructor() { }
-
   public connect(io) {
     this.socket = io(this.url);
-    this.initializeSocketHandlers();
-    this.socket.emit('new player', 'jock', 'my image');
+    this.createNewPlayer();
   }
 
-  private initializeSocketHandlers() {
-    // this.socket.on('new player info', (name: string) => {
-    //   console.log('player name', name);
-    // })
+  public createNewPlayer() {
+    this.socket.emit('new player', 'jock', 'my image');
   }
 
   public getPlayerInfo() {
     const obserable = new Observable(observer => {
       this.socket.on('new player info', (name: string) => {
         observer.next(name);
+      });
+      return () => {
+        this.socket.disconnect();
+      };
+    });
+    return obserable;
+  }
+
+  public getBoardInfo() {
+    const obserable = new Observable(observer => {
+      this.socket.on('board info', (board: Board) => {
+        observer.next(board);
       });
       return () => {
         this.socket.disconnect();

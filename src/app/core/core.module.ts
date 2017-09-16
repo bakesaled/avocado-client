@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatService } from './chat.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { ImageService } from './image.service';
-import { GameService } from './game.service';
-import { BoardService } from './board.service';
+import { ApiService } from './api.service';
 
 @NgModule({
   imports: [
@@ -13,8 +12,7 @@ import { BoardService } from './board.service';
   providers: [
     ChatService,
     ImageService,
-    GameService,
-    BoardService
+    ApiService
   ]
 })
 export class CoreModule {
