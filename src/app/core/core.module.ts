@@ -4,6 +4,7 @@ import { ChatService } from './chat.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { ImageService } from './image.service';
 import { GameService } from './game.service';
+import { BoardService } from './board.service';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { GameService } from './game.service';
   providers: [
     ChatService,
     ImageService,
-    GameService
+    GameService,
+    BoardService
   ]
 })
 export class CoreModule {

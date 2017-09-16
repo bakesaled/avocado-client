@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ImageService } from '../core/image.service';
 import { Img } from '../core/classes/img';
 import { Subscription } from 'rxjs/Subscription';
+import { BoardService } from '../core/board.service';
 
 @Component({
   selector: 'avocado-board',
@@ -12,22 +13,28 @@ export class BoardComponent implements OnInit, OnDestroy {
   private context: CanvasRenderingContext2D;
   private lightsContext: CanvasRenderingContext2D;
   private imagesSubscription: Subscription;
+  private boardSubscription: Subscription;
   
   @ViewChild('board') canvasRef: ElementRef;
   @ViewChild('lights') lightsCanvasRef: ElementRef;
 
-  constructor(private imageService: ImageService) {
+  constructor(private imageService: ImageService, private boardService: BoardService) {
     this.imagesSubscription = this.imageService.htmlImagesObs.subscribe((images) => this.drawBoard(images));
   }
 
   ngOnInit() {
     this.context = this.canvasRef.nativeElement.getContext('2d');
     this.lightsContext = this.lightsCanvasRef.nativeElement.getContext('2d');
-    this.imageService.load();
+
+    this.boardSubscription = this.boardService.getBoardInfo().subscribe(boards => {
+      console.log('got boards', boards);
+      this.imageService.load();
+    });
   }
 
   ngOnDestroy() {
     this.imagesSubscription.unsubscribe();
+    this.boardSubscription.unsubscribe();
   }
 
   clear() {

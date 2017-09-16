@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class GameService {
   private url = 'http://localhost:3000';
-  private socket: SocketIOClient.Socket;
+  public socket: SocketIOClient.Socket;
 
   constructor() { }
 
@@ -25,9 +25,9 @@ export class GameService {
       this.socket.on('new player info', (name: string) => {
         observer.next(name);
       });
-      // return () => {
-      //   this.socket.disconnect();
-      // };
+      return () => {
+        this.socket.disconnect();
+      };
     });
     return obserable;
   }
