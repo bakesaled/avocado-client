@@ -3,6 +3,9 @@ import { ImageService } from '../core/image.service';
 import { Img } from '../core/classes/img';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from '../core/api.service';
+import { Board } from '../core/classes/board';
+import { Layer } from '../core/classes/layer';
+import { Tile } from '../core/classes/tile';
 
 @Component({
   selector: 'avocado-board',
@@ -15,19 +18,23 @@ export class BoardComponent implements OnInit, OnDestroy {
   private imagesSubscription: Subscription;
   private boardSubscription: Subscription;
   
-  @ViewChild('board') canvasRef: ElementRef;
-  @ViewChild('lights') lightsCanvasRef: ElementRef;
+  @ViewChild('backgroundCanvas') backgroundCanvasRef: ElementRef;
+  @ViewChild('trafficCanvas') trafficCanvasRef: ElementRef;
+
+  public board: Board;
 
   constructor(private imageService: ImageService, private apiService: ApiService) {
     this.imagesSubscription = this.imageService.htmlImagesObs.subscribe((images) => this.drawBoard(images));
   }
 
   ngOnInit() {
-    this.context = this.canvasRef.nativeElement.getContext('2d');
-    this.lightsContext = this.lightsCanvasRef.nativeElement.getContext('2d');
+    this.context = this.backgroundCanvasRef.nativeElement.getContext('2d');
+    this.lightsContext = this.trafficCanvasRef.nativeElement.getContext('2d');
 
-    this.boardSubscription = this.apiService.getBoardInfo().subscribe(board => {
+    this.boardSubscription = this.apiService.getBoardInfo().subscribe((board: Board) => {
       console.log('got boards', board);
+      this.board = board;
+      this.createBoard();
       this.imageService.load();
     });
   }
@@ -35,6 +42,27 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.imagesSubscription.unsubscribe();
     this.boardSubscription.unsubscribe();
+  }
+
+  public handleDrop(event: Event) {
+    console.log('drop successful');
+  }
+
+  private createBoard() {
+    console.log('creating boards');
+    this.initLayer(this.board.backgroundLayer);
+    this.initLayer(this.board.trafficLayer);
+  }
+
+  private initLayer(layer: Layer) {
+    layer.tiles = new Array(layer.rows);
+
+    for (let i = 0; i < layer.rows; i++) {
+      layer.tiles[i] = new Array(layer.columns);
+      for (let j = 0; j < layer.columns; j++) {
+        layer.tiles[i][j] = new Tile();
+      }
+    }
   }
 
   clear() {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MdButtonModule, MdIconModule, MdInputModule, MdSidenavModule, MdToolbarModule } from '@angular/material';
+import { DndModule, DragDropService } from 'ng2-dnd';
 
 const materialModules = [
   MdToolbarModule,
@@ -16,13 +17,15 @@ const materialModules = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    materialModules
+    materialModules,
+    DndModule.forRoot()
   ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    materialModules
-  ]
+    materialModules,
+    DndModule
+  ],
 })
 export class SharedModule { }

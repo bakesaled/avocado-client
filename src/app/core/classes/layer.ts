@@ -1,3 +1,10 @@
+import { Tile } from './tile';
+
 export class Layer {
-  constructor(public height: number, public width: number) {}
+  public tiles: Array<Array<Tile>>;
+  public get rowTiles() {
+    return this.tiles
+  }
+  constructor(public columns: number, public rows: number) {
+  }
 }

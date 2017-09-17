@@ -9,12 +9,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { routing } from './app.routing';
 import { AuthService } from './auth.service';
 import { BoardComponent } from './board/board.component';
+import { TilesPanelComponent } from './tiles-panel/tiles-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    BoardComponent
+    BoardComponent,
+    TilesPanelComponent
   ],
   imports: [
     routing,

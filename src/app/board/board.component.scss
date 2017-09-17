@@ -1,3 +1,20 @@
 canvas {
   position: absolute;
 }
+
+.avocado-droppable-layer {
+  position: absolute;
+  border-left: solid 1px #333;
+  border-top: solid 1px #333;
+}
+
+.avocado-droppable-row {
+  display: flex;
+}
+
+.avocado-droppable-tile {
+  height: 63px;
+  width: 63px;
+  border-right: solid 1px #333;
+  border-bottom: solid 1px #333;
+}
