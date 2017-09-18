@@ -6,6 +6,9 @@ import { ApiService } from '../core/api.service';
 import { Board } from '../core/classes/board';
 import { Layer } from '../core/classes/layer';
 import { Tile } from '../core/classes/tile';
+import { Coordinate } from '../core/classes/coordinate';
+import { GameState } from '../core/classes/game-state';
+import { CoordinateTile } from '../core/classes/coordinate-tile';
 
 @Component({
   selector: 'avocado-board',
@@ -15,8 +18,9 @@ import { Tile } from '../core/classes/tile';
 export class BoardComponent implements OnInit, OnDestroy {
   private context: CanvasRenderingContext2D;
   private lightsContext: CanvasRenderingContext2D;
-  private imagesSubscription: Subscription;
   private boardSubscription: Subscription;
+  private gameStateSubscription: Subscription;
+  private readonly tileSize: number = 64;
   
   @ViewChild('backgroundCanvas') backgroundCanvasRef: ElementRef;
   @ViewChild('trafficCanvas') trafficCanvasRef: ElementRef;
@@ -24,7 +28,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public board: Board;
 
   constructor(private imageService: ImageService, private apiService: ApiService) {
-    this.imagesSubscription = this.imageService.htmlImagesObs.subscribe((images) => this.drawBoard(images));
+
   }
 
   ngOnInit() {
@@ -35,23 +39,46 @@ export class BoardComponent implements OnInit, OnDestroy {
       console.log('got boards', board);
       this.board = board;
       this.createBoard();
-      this.imageService.load();
     });
+
+    this.gameStateSubscription = this.apiService.getGameState().subscribe((gameState: GameState) => {
+      console.log('got game state', gameState);
+
+      //TODO: Update board
+      gameState.streets.forEach((street) => {
+        this.drawStreet(street);
+      })
+    })
   }
 
   ngOnDestroy() {
-    this.imagesSubscription.unsubscribe();
     this.boardSubscription.unsubscribe();
+    this.gameStateSubscription.unsubscribe();
   }
 
   public handleDrop(event: Event) {
     console.log('drop successful');
   }
 
+  public drawStreet(street: CoordinateTile) {
+    const img: Img = this.imageService.images.find(i => i.id === street.tile.streetId);
+    this.drawSquare(this.context, street.coord, img);
+  }
+
+  private drawSquare(context: CanvasRenderingContext2D, coordinate: Coordinate, img: Img) {
+    const x = coordinate.x * this.tileSize;
+    const y = coordinate.y * this.tileSize;
+    const htmlImage = this.imageService.htmlImages.find(i => i.name === img.name);
+    context.drawImage(htmlImage, img.x, img.y, img.width, img.height, y, x, this.tileSize, this.tileSize);
+  }
+
   private createBoard() {
     console.log('creating boards');
     this.initLayer(this.board.backgroundLayer);
     this.initLayer(this.board.trafficLayer);
+
+    this.backgroundCanvasRef.nativeElement.height = this.board.backgroundLayer.rows * this.tileSize;
+    this.backgroundCanvasRef.nativeElement.width = this.board.backgroundLayer.columns * this.tileSize;
   }
 
   private initLayer(layer: Layer) {

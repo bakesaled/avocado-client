@@ -37,4 +37,16 @@ export class ApiService {
     });
     return obserable;
   }
+
+  public getGameState() {
+    const obserable = new Observable(observer => {
+      this.socket.on('new game state', (state) => {
+        observer.next(state);
+      });
+      return () => {
+        this.socket.disconnect();
+      };
+    });
+    return obserable;
+  }
 }
