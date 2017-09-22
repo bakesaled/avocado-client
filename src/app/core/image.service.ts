@@ -19,7 +19,8 @@ export class ImageService {
       new Img(1, 'road-eastwest', 0, 0, 256, 256, basePath + 'roads/roadEW.png'),
       new Img(2, 'road-northsouth', 0, 0, 256, 256, basePath + 'roads/roadNS.png'),
       new Img(3, 'road-intersection', 0, 0, 256, 256, basePath + 'roads/roadNEWS.png'),
-      new Img(4, 'traffic-light-red', 1, 113, 414, 414, basePath + 'traffic-light.png')
+      new Img(4, 'traffic-light-red', 1, 113, 414, 414, basePath + 'traffic-light.png'),
+      new Img(5, 'car-red', 0, 0, 230, 122, basePath + 'vehicles/car_red.png')
     ]
   }
 

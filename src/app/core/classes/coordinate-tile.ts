@@ -3,7 +3,7 @@ import { Tile } from './tile';
 
 export class CoordinateTile {
   constructor(
-    public coord: Coordinate,
+    public coordinate: Coordinate,
     public tile: Tile
   ) {}
 }

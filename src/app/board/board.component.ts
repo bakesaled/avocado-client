@@ -9,6 +9,7 @@ import { Tile } from '../core/classes/tile';
 import { Coordinate } from '../core/classes/coordinate';
 import { GameState } from '../core/classes/game-state';
 import { CoordinateTile } from '../core/classes/coordinate-tile';
+import { Vehicle } from '../core/classes/vehicle';
 
 @Component({
   selector: 'avocado-board',
@@ -17,7 +18,7 @@ import { CoordinateTile } from '../core/classes/coordinate-tile';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private context: CanvasRenderingContext2D;
-  private lightsContext: CanvasRenderingContext2D;
+  private trafficContext: CanvasRenderingContext2D;
   private boardSubscription: Subscription;
   private gameStateSubscription: Subscription;
   private readonly tileSize: number = 64;
@@ -33,7 +34,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.context = this.backgroundCanvasRef.nativeElement.getContext('2d');
-    this.lightsContext = this.trafficCanvasRef.nativeElement.getContext('2d');
+    this.trafficContext = this.trafficCanvasRef.nativeElement.getContext('2d');
 
     this.boardSubscription = this.apiService.getBoardInfo().subscribe((board: Board) => {
       console.log('got boards', board);
@@ -47,7 +48,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       //TODO: Update board
       gameState.streets.forEach((street) => {
         this.drawStreet(street);
-      })
+      });
+
+      gameState.vehicles.forEach((vehicle) => {
+        this.drawVehicle(vehicle);
+      });
     })
   }
 
@@ -62,7 +67,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   public drawStreet(street: CoordinateTile) {
     const img: Img = this.imageService.images.find(i => i.id === street.tile.streetId);
-    this.drawSquare(this.context, street.coord, img);
+    this.drawSquare(this.context, street.coordinate, img);
   }
 
   private drawSquare(context: CanvasRenderingContext2D, coordinate: Coordinate, img: Img) {
@@ -131,6 +136,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   private drawLights(htmlImages: Array<HTMLImageElement>, c: number, r: number, tileSize: number) {
     const img: Img = this.imageService.images.find(i => i.name === 'traffic-light-red');
     const htmlImage = htmlImages.find(i => i.name === img.name);
-    this.lightsContext.drawImage(htmlImage, img.x, img.y, img.width, img.height, ((c * tileSize) + 0), ((r * tileSize) + 32), 16, 16);
+    this.trafficContext.drawImage(htmlImage, img.x, img.y, img.width, img.height, ((c * tileSize) + 0), ((r * tileSize) + 32), 16, 16);
+  }
+
+  public drawVehicle(vehicle: Vehicle) {
+    const img: Img = this.imageService.images.find(i => i.id === 5);
+    this.drawSquare(this.trafficContext, vehicle.coordinate, img);
   }
 }
