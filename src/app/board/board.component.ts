@@ -74,7 +74,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     const x = coordinate.x * this.tileSize;
     const y = coordinate.y * this.tileSize;
     const htmlImage = this.imageService.htmlImages.find(i => i.name === img.name);
-    context.drawImage(htmlImage, img.x, img.y, img.width, img.height, y, x, this.tileSize, this.tileSize);
+    context.drawImage(htmlImage, img.x, img.y, img.width, img.height, x, y, this.tileSize, this.tileSize);
   }
 
   private createBoard() {
