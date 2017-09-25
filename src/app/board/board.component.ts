@@ -10,6 +10,7 @@ import { Coordinate } from '../core/classes/coordinate';
 import { GameState } from '../core/classes/game-state';
 import { CoordinateTile } from '../core/classes/coordinate-tile';
 import { Vehicle } from '../core/classes/vehicle';
+import { Direction } from '../core/classes/direction';
 
 @Component({
   selector: 'avocado-board',
@@ -51,6 +52,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
 
       gameState.vehicles.forEach((vehicle) => {
+        this.clearTraffic();
         this.drawVehicle(vehicle);
       });
     })
@@ -66,14 +68,19 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   public drawStreet(street: CoordinateTile) {
-    const img: Img = this.imageService.images.find(i => i.id === street.tile.streetId);
+    const img: Img = this.imageService.images.find(i => i.id === 1);
     this.drawSquare(this.context, street.coordinate, img);
+  }
+
+  private clearTraffic() {
+    this.trafficContext.clearRect(0, 0, this.trafficCanvasRef.nativeElement.width, this.trafficCanvasRef.nativeElement.height)
   }
 
   private drawSquare(context: CanvasRenderingContext2D, coordinate: Coordinate, img: Img) {
     const x = coordinate.x * this.tileSize;
     const y = coordinate.y * this.tileSize;
     const htmlImage = this.imageService.htmlImages.find(i => i.name === img.name);
+
     context.drawImage(htmlImage, img.x, img.y, img.width, img.height, x, y, this.tileSize, this.tileSize);
   }
 
@@ -84,6 +91,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.backgroundCanvasRef.nativeElement.height = this.board.backgroundLayer.rows * this.tileSize;
     this.backgroundCanvasRef.nativeElement.width = this.board.backgroundLayer.columns * this.tileSize;
+
+    this.trafficCanvasRef.nativeElement.height = this.board.trafficLayer.rows * this.tileSize;
+    this.trafficCanvasRef.nativeElement.width = this.board.trafficLayer.columns * this.tileSize;
   }
 
   private initLayer(layer: Layer) {
@@ -140,7 +150,21 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   public drawVehicle(vehicle: Vehicle) {
-    const img: Img = this.imageService.images.find(i => i.id === 5);
+    let img: Img;
+    switch (vehicle.direction) {
+      case Direction.Up:
+        img = this.imageService.images.find(i => i.id === 5);
+        break;
+      case Direction.Down:
+        img = this.imageService.images.find(i => i.id === 6);
+        break;
+      case Direction.Left:
+        img = this.imageService.images.find(i => i.id === 7);
+        break;
+      case Direction.Right:
+        img = this.imageService.images.find(i => i.id === 8);
+        break;
+    }
     this.drawSquare(this.trafficContext, vehicle.coordinate, img);
   }
 }

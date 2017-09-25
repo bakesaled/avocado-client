@@ -16,11 +16,15 @@ export class ImageService {
     const basePath = '../../assets/';
     this.images = [
       new Img(0, 'clover', 0, 0, 1024, 1024, basePath + 'textures/clover.jpg'),
-      new Img(1, 'road-eastwest', 0, 0, 256, 256, basePath + 'roads/roadEW.png'),
+      new Img(1, 'asphalt', 0, 0, 512, 512, basePath + 'textures/asphalt.png'),
+      // new Img(1, 'road-eastwest', 0, 0, 256, 256, basePath + 'roads/roadEW.png'),
       new Img(2, 'road-northsouth', 0, 0, 256, 256, basePath + 'roads/roadNS.png'),
       new Img(3, 'road-intersection', 0, 0, 256, 256, basePath + 'roads/roadNEWS.png'),
       new Img(4, 'traffic-light-red', 1, 113, 414, 414, basePath + 'traffic-light.png'),
-      new Img(5, 'car-red', 0, 0, 230, 122, basePath + 'vehicles/car_red.png')
+      new Img(5, 'car-red-up', -54, 0, 230, 230, basePath + 'vehicles/car_red_up.png'),
+      new Img(6, 'car-red-down', -54, 0, 230, 230, basePath + 'vehicles/car_red_down.png'),
+      new Img(7, 'car-red-left', 0, -54, 230, 230, basePath + 'vehicles/car_red_left.png'),
+      new Img(8, 'car-red-right', 0, -54, 230, 230, basePath + 'vehicles/car_red_right.png')
     ]
   }
 
