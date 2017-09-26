@@ -51,8 +51,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.drawStreet(street);
       });
 
+      this.clearTraffic();
       gameState.vehicles.forEach((vehicle) => {
-        this.clearTraffic();
         this.drawVehicle(vehicle);
       });
     })
