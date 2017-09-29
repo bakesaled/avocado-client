@@ -55,7 +55,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       gameState.vehicles.forEach((vehicle) => {
         this.drawVehicle(vehicle);
       });
-    })
+    });
   }
 
   ngOnDestroy() {

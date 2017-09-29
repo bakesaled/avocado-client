@@ -10,13 +10,15 @@ import { routing } from './app.routing';
 import { AuthService } from './auth.service';
 import { BoardComponent } from './board/board.component';
 import { TilesPanelComponent } from './tiles-panel/tiles-panel.component';
+import { StatSheetComponent } from './stat-sheet/stat-sheet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     BoardComponent,
-    TilesPanelComponent
+    TilesPanelComponent,
+    StatSheetComponent
   ],
   imports: [
     routing,
